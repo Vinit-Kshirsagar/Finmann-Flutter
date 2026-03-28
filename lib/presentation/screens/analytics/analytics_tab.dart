@@ -11,6 +11,7 @@ import '../../../data/models/user_model.dart';
 import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_state.dart';
 import 'package:finmann/shared/widgets/fm_card.dart';
+import 'package:finmann/shared/widgets/fm_skeleton.dart';
 
 // Softer, more harmonious palette — avoids harsh reds/yellows clashing
 const _kPieColors = [
@@ -43,13 +44,21 @@ class _AnalyticsTabState extends State<AnalyticsTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bg900,
+      backgroundColor: AppColors.cream100,
       appBar: _appBar(),
       body: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {
           if (state is! TransactionLoaded) {
-            return const Center(child: CircularProgressIndicator(
-                color: AppColors.primary, strokeWidth: 2));
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: const [
+                FmSkeleton(width: double.infinity, height: 90),
+                SizedBox(height: 12),
+                FmSkeleton(width: double.infinity, height: 90),
+                SizedBox(height: 12),
+                FmSkeleton(width: double.infinity, height: 320),
+              ],
+            );
           }
           final now = DateTime.now();
           final month = state.transactions.where(
@@ -109,13 +118,13 @@ class _AnalyticsTabState extends State<AnalyticsTab>
     preferredSize: const Size.fromHeight(96),
     child: Container(
       decoration: const BoxDecoration(
-        color: AppColors.bg900,
+        color: AppColors.cream100,
         border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: SafeArea(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 8),
-          child: Text('Analytics', style: GoogleFonts.spaceGrotesk(
+          child: Text('Analytics', style: GoogleFonts.dmSans(
               color: AppColors.textPrimary, fontSize: 24,
               fontWeight: FontWeight.w800, letterSpacing: -0.5)),
         ),
@@ -155,7 +164,7 @@ class _PillTabsState extends State<_PillTabs> {
   @override
   Widget build(BuildContext context) => Container(
     height: 36,
-    decoration: BoxDecoration(color: AppColors.bg700,
+    decoration: BoxDecoration(color: AppColors.cream300,
         borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.border)),
     child: Row(children: ['Overview', 'Trends'].asMap().entries.map((e) {
       final active = widget.controller.index == e.key;
@@ -169,8 +178,8 @@ class _PillTabsState extends State<_PillTabs> {
             borderRadius: BorderRadius.circular(9),
           ),
           alignment: Alignment.center,
-          child: Text(e.value, style: GoogleFonts.spaceGrotesk(
-              color: active ? AppColors.bg900 : AppColors.textMuted,
+          child: Text(e.value, style: GoogleFonts.dmSans(
+              color: active ? AppColors.cream100 : AppColors.textMuted,
               fontWeight: FontWeight.w700, fontSize: 13)),
         ),
       ));
@@ -200,23 +209,23 @@ Widget _StatTile(String label, String value, Color color, IconData icon) =>
       padding: const EdgeInsets.fromLTRB(10, 12, 10, 12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.10), color.withOpacity(0.04)],
+          colors: [color.withValues(alpha: 0.10), color.withValues(alpha: 0.04)],
           begin: Alignment.topLeft, end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.22)),
+        border: Border.all(color: color.withValues(alpha: 0.22)),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           Container(padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(color: color.withOpacity(0.18),
+            decoration: BoxDecoration(color: color.withValues(alpha: 0.18),
                 borderRadius: BorderRadius.circular(6)),
             child: Icon(icon, color: color, size: 11)),
           const SizedBox(width: 5),
           Text(label, style: GoogleFonts.dmSans(color: AppColors.textMuted, fontSize: 10)),
         ]),
         const SizedBox(height: 7),
-        Text(value, style: GoogleFonts.spaceGrotesk(
+        Text(value, style: GoogleFonts.dmSans(
             color: color, fontWeight: FontWeight.w800, fontSize: 15, letterSpacing: -0.3)),
       ]),
     ));
@@ -238,8 +247,8 @@ class _HealthScore extends StatelessWidget {
     final (label, color, emoji) = _grade;
     final pct = score / 100.0;
     return FmCard(
-      borderColor: color.withOpacity(0.25),
-      backgroundColor: color.withOpacity(0.04),
+      borderColor: color.withValues(alpha: 0.25),
+      backgroundColor: color.withValues(alpha: 0.04),
       child: Row(children: [
         SizedBox(width: 68, height: 68, child: Stack(alignment: Alignment.center, children: [
           TweenAnimationBuilder<double>(
@@ -248,7 +257,7 @@ class _HealthScore extends StatelessWidget {
             curve: Curves.easeOutCubic,
             builder: (_, v, __) => CircularProgressIndicator(
               value: v, strokeWidth: 6,
-              backgroundColor: AppColors.bg700,
+              backgroundColor: AppColors.cream300,
               valueColor: AlwaysStoppedAnimation(color),
               strokeCap: StrokeCap.round,
             ),
@@ -258,7 +267,7 @@ class _HealthScore extends StatelessWidget {
         const SizedBox(width: 16),
         Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            Text('Financial Health', style: GoogleFonts.spaceGrotesk(
+            Text('Financial Health', style: GoogleFonts.dmSans(
                 color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 14)),
             const Spacer(),
             _chip(label, color),
@@ -268,7 +277,7 @@ class _HealthScore extends StatelessWidget {
             tween: IntTween(begin: 0, end: score),
             duration: const Duration(milliseconds: 1100),
             builder: (_, v, __) => Text('$v / 100',
-                style: GoogleFonts.spaceGrotesk(
+                style: GoogleFonts.dmSans(
                     color: color, fontSize: 22,
                     fontWeight: FontWeight.w800, letterSpacing: -1)),
           ),
@@ -294,7 +303,7 @@ class _PieCard extends StatelessWidget {
     final hasTouch = touched >= 0 && touched < sorted.length;
     return FmCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
-        Text('Expense Breakdown', style: GoogleFonts.spaceGrotesk(
+        Text('Expense Breakdown', style: GoogleFonts.dmSans(
             color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 16)),
         const Spacer(),
         _chip(CurrencyFormatter.formatCompact(total), AppColors.expense),
@@ -310,18 +319,18 @@ class _PieCard extends StatelessWidget {
             final c = _pc(e.key);
             final pct = total > 0 ? e.value.value / total * 100 : 0.0;
             return PieChartSectionData(
-              color: active ? c : c.withOpacity(0.75),
+              color: active ? c : c.withValues(alpha: 0.75),
               value: e.value.value,
               // Show % label only on active slice, inside the ring
               title: active ? '${pct.toStringAsFixed(0)}%' : '',
-              titleStyle: GoogleFonts.spaceGrotesk(
+              titleStyle: GoogleFonts.dmSans(
                   color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700),
               titlePositionPercentageOffset: 0.6,
               // Small radius bump — stays within fixed SizedBox
               radius: active ? 74 : 62,
               borderSide: active
                   ? BorderSide(color: c, width: 2)
-                  : BorderSide(color: c.withOpacity(0.15), width: 0.5),
+                  : BorderSide(color: c.withValues(alpha: 0.15), width: 0.5),
             );
           }).toList(),
           centerSpaceRadius: 54, sectionsSpace: 2,
@@ -355,9 +364,9 @@ class _PieCard extends StatelessWidget {
             duration: const Duration(milliseconds: 150),
             padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
             decoration: BoxDecoration(
-              color: active ? c.withOpacity(0.18) : c.withOpacity(0.06),
+              color: active ? c.withValues(alpha: 0.18) : c.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: active ? c : c.withOpacity(0.2)),
+              border: Border.all(color: active ? c : c.withValues(alpha: 0.2)),
             ),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
               Container(width: 7, height: 7,
@@ -381,7 +390,7 @@ class _CenterLabel extends StatelessWidget {
   const _CenterLabel({super.key, required this.value, required this.label, required this.color});
   @override
   Widget build(BuildContext context) => Column(mainAxisSize: MainAxisSize.min, children: [
-    Text(value, style: GoogleFonts.spaceGrotesk(
+    Text(value, style: GoogleFonts.dmSans(
         color: color, fontWeight: FontWeight.w800, fontSize: 15, letterSpacing: -0.3)),
     const SizedBox(height: 2),
     Text(label, style: GoogleFonts.dmSans(color: AppColors.textMuted, fontSize: 10)),
@@ -397,7 +406,7 @@ class _CategoryBars extends StatelessWidget {
   @override
   Widget build(BuildContext context) => FmCard(
     child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text('By Category', style: GoogleFonts.spaceGrotesk(
+      Text('By Category', style: GoogleFonts.dmSans(
           color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 16)),
       const SizedBox(height: 16),
       ...sorted.asMap().entries.map((e) {
@@ -408,7 +417,7 @@ class _CategoryBars extends StatelessWidget {
           child: Column(children: [
             Row(children: [
               Container(width: 32, height: 32,
-                decoration: BoxDecoration(color: c.withOpacity(0.12),
+                decoration: BoxDecoration(color: c.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(9)),
                 child: Center(child: Container(width: 9, height: 9,
                     decoration: BoxDecoration(color: c, shape: BoxShape.circle)))),
@@ -416,7 +425,7 @@ class _CategoryBars extends StatelessWidget {
               Expanded(child: Text(e.value.key, style: GoogleFonts.dmSans(
                   color: AppColors.textPrimary, fontSize: 13, fontWeight: FontWeight.w500))),
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Text(CurrencyFormatter.formatCompact(e.value.value), style: GoogleFonts.spaceGrotesk(
+                Text(CurrencyFormatter.formatCompact(e.value.value), style: GoogleFonts.dmSans(
                     color: c, fontWeight: FontWeight.w700, fontSize: 13)),
                 Text('${(pct * 100).toStringAsFixed(0)}%',
                     style: GoogleFonts.dmSans(color: AppColors.textMuted, fontSize: 10)),
@@ -429,13 +438,13 @@ class _CategoryBars extends StatelessWidget {
               curve: Curves.easeOutCubic,
               builder: (_, v, __) => Stack(children: [
                 Container(height: 6, decoration: BoxDecoration(
-                    color: AppColors.bg700, borderRadius: BorderRadius.circular(6))),
+                    color: AppColors.cream300, borderRadius: BorderRadius.circular(6))),
                 FractionallySizedBox(widthFactor: v, child: Container(
                   height: 6,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [c.withOpacity(0.6), c]),
+                    gradient: LinearGradient(colors: [c.withValues(alpha: 0.6), c]),
                     borderRadius: BorderRadius.circular(6),
-                    boxShadow: [BoxShadow(color: c.withOpacity(0.4), blurRadius: 6, spreadRadius: 0)],
+                    boxShadow: [BoxShadow(color: c.withValues(alpha: 0.4), blurRadius: 6, spreadRadius: 0)],
                   ),
                 )),
               ]),
@@ -455,7 +464,7 @@ class _BarChart extends StatelessWidget {
   BarChartRodData _rod(double y, Color c) => BarChartRodData(
     toY: y, width: 10,
     borderRadius: const BorderRadius.vertical(top: Radius.circular(5)),
-    gradient: LinearGradient(colors: [c.withOpacity(0.5), c],
+    gradient: LinearGradient(colors: [c.withValues(alpha: 0.5), c],
         begin: Alignment.bottomCenter, end: Alignment.topCenter),
   );
 
@@ -466,7 +475,7 @@ class _BarChart extends StatelessWidget {
     final topY = maxY < 1000 ? 1000.0 : maxY * 1.2;
     return FmCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
-        Text('6-Month Trend', style: GoogleFonts.spaceGrotesk(
+        Text('6-Month Trend', style: GoogleFonts.dmSans(
             color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 16)),
         const Spacer(),
         _dot(AppColors.income, 'In'), const SizedBox(width: 12), _dot(AppColors.expense, 'Out'),
@@ -499,7 +508,7 @@ class _BarChart extends StatelessWidget {
           tooltipRoundedRadius: 10,
           getTooltipItem: (g, _, rod, ri) => BarTooltipItem(
             '${ri == 0 ? "In" : "Out"}\n${CurrencyFormatter.formatCompact(rod.toY)}',
-            GoogleFonts.spaceGrotesk(
+            GoogleFonts.dmSans(
                 color: ri == 0 ? AppColors.income : AppColors.expense,
                 fontWeight: FontWeight.w700, fontSize: 11)),
         )),
@@ -542,7 +551,7 @@ class _Insights extends StatelessWidget {
 
     return FmCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Row(children: [
-        Text('Insights', style: GoogleFonts.spaceGrotesk(
+        Text('Insights', style: GoogleFonts.dmSans(
             color: AppColors.textPrimary, fontWeight: FontWeight.w700, fontSize: 16)),
         const SizedBox(width: 8),
         _chip('Auto', AppColors.accent),
@@ -592,7 +601,7 @@ class _WeekdayBar extends StatelessWidget {
       children: List.generate(7, (i) {
         final pct = maxVal > 0 ? totals[i] / maxVal : 0.0;
         final isPeak = i == peakIdx;
-        final c = isPeak ? AppColors.info : AppColors.textMuted.withOpacity(0.3);
+        final c = isPeak ? AppColors.info : AppColors.textMuted.withValues(alpha: 0.3);
         return Column(mainAxisSize: MainAxisSize.min, children: [
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: pct),
@@ -604,7 +613,7 @@ class _WeekdayBar extends StatelessWidget {
                 color: c,
                 borderRadius: BorderRadius.circular(4),
                 boxShadow: isPeak
-                    ? [BoxShadow(color: AppColors.info.withOpacity(0.3), blurRadius: 6)]
+                    ? [BoxShadow(color: AppColors.info.withValues(alpha: 0.3), blurRadius: 6)]
                     : null,
               ),
             ),
@@ -625,7 +634,7 @@ class _InsightRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Container(padding: const EdgeInsets.all(7),
-      decoration: BoxDecoration(color: color.withOpacity(0.12),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(10)),
       child: Icon(icon, color: color, size: 15)),
     const SizedBox(width: 12),
@@ -643,12 +652,12 @@ class _NoData extends StatelessWidget {
     padding: const EdgeInsets.all(48),
     child: Column(children: [
       Container(width: 68, height: 68,
-        decoration: BoxDecoration(color: AppColors.primary.withOpacity(0.08),
+        decoration: BoxDecoration(color: AppColors.primary.withValues(alpha: 0.08),
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.primary.withOpacity(0.15), width: 1.5)),
+            border: Border.all(color: AppColors.primary.withValues(alpha: 0.15), width: 1.5)),
         child: const Center(child: Text('📊', style: TextStyle(fontSize: 30)))),
       const SizedBox(height: 14),
-      Text('No expenses yet', style: GoogleFonts.spaceGrotesk(
+      Text('No expenses yet', style: GoogleFonts.dmSans(
           color: AppColors.textPrimary, fontWeight: FontWeight.w600, fontSize: 15)),
       const SizedBox(height: 5),
       Text('Add transactions to see your breakdown', textAlign: TextAlign.center,
@@ -660,7 +669,7 @@ class _NoData extends StatelessWidget {
 // ── Micro helpers ─────────────────────────────────────────────
 Widget _chip(String text, Color color) => Container(
   padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-  decoration: BoxDecoration(color: color.withOpacity(0.1),
+  decoration: BoxDecoration(color: color.withValues(alpha: 0.1),
       borderRadius: BorderRadius.circular(20)),
   child: Text(text, style: GoogleFonts.dmSans(
       color: color, fontSize: 11, fontWeight: FontWeight.w600)),

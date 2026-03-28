@@ -14,7 +14,7 @@ void showNlpSheet(BuildContext context, {required String userId}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: AppColors.bg800,
+    backgroundColor: AppColors.cream200,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
     builder: (_) => BlocProvider.value(
@@ -61,7 +61,9 @@ class _NlpInputSheetState extends State<NlpInputSheet> {
       date: _preview!.date,
     ));
     setState(() => _confirmed = true);
-    Future.delayed(const Duration(milliseconds: 800), () => Navigator.pop(context));
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) Navigator.pop(context);
+    });
   }
 
   @override
@@ -91,7 +93,7 @@ class _NlpInputSheetState extends State<NlpInputSheet> {
                 gradient: const LinearGradient(colors: [AppColors.primary, AppColors.accent]),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.auto_awesome_rounded, color: AppColors.bg900, size: 18),
+              child: const Icon(Icons.auto_awesome_rounded, color: AppColors.cream100, size: 18),
             ),
             const SizedBox(width: 10),
             Text('Quick Add', style: Theme.of(context).textTheme.headlineLarge),
@@ -103,7 +105,7 @@ class _NlpInputSheetState extends State<NlpInputSheet> {
           // Input field
           Container(
             decoration: BoxDecoration(
-              color: AppColors.bg700,
+              color: AppColors.cream300,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: _preview != null ? AppColors.primary : AppColors.border),
             ),
@@ -136,7 +138,7 @@ class _NlpInputSheetState extends State<NlpInputSheet> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                   decoration: BoxDecoration(
-                    color: AppColors.bg600,
+                    color: AppColors.cream400,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(color: AppColors.border),
                   ),
@@ -161,7 +163,7 @@ class _NlpInputSheetState extends State<NlpInputSheet> {
                 label: Text(_confirmed ? 'Added!' : 'Add Transaction'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _confirmed ? AppColors.primaryDark : AppColors.primary,
-                  foregroundColor: AppColors.bg900,
+                  foregroundColor: AppColors.cream100,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
@@ -191,9 +193,9 @@ class _PreviewCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(children: [
         Text(emoji, style: const TextStyle(fontSize: 28)),
@@ -204,7 +206,7 @@ class _PreviewCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.15),
+                  color: color.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -217,7 +219,7 @@ class _PreviewCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
-                    color: AppColors.bg700,
+                    color: AppColors.cream300,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(result.category!,

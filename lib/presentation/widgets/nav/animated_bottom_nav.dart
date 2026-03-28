@@ -20,7 +20,7 @@ class AnimatedBottomNav extends StatelessWidget {
     return Container(
       height: 72,
       decoration: const BoxDecoration(
-        color: AppColors.bg800,
+        color: AppColors.cream200,
         border: Border(top: BorderSide(color: AppColors.border, width: 1)),
       ),
       child: Row(
@@ -46,7 +46,7 @@ class AnimatedBottomNav extends StatelessWidget {
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(2),
                         boxShadow: selected ? [
-                          BoxShadow(color: AppColors.primary.withOpacity(0.5), blurRadius: 6, spreadRadius: 1)
+                          BoxShadow(color: AppColors.primary.withValues(alpha: 0.5), blurRadius: 6, spreadRadius: 1)
                         ] : [],
                       ),
                     ),

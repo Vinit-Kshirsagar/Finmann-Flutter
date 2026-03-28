@@ -46,7 +46,7 @@ class VelocityCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.12),
+                color: statusColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(Icons.speed_rounded, color: statusColor, size: 18),
@@ -58,7 +58,7 @@ class VelocityCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.12),
+                color: statusColor.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -72,7 +72,7 @@ class VelocityCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             child: LinearProgressIndicator(
               value: pctUsed,
-              backgroundColor: AppColors.bg700,
+              backgroundColor: AppColors.cream300,
               valueColor: AlwaysStoppedAnimation(statusColor),
               minHeight: 8,
             ),
@@ -92,7 +92,7 @@ class VelocityCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.expenseSurface,
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.expense.withOpacity(0.3)),
+                border: Border.all(color: AppColors.expense.withValues(alpha: 0.3)),
               ),
               child: Row(children: [
                 const Icon(Icons.warning_amber_rounded, color: AppColors.expense, size: 16),

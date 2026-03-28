@@ -26,7 +26,7 @@ class BudgetBar extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: over ? AppColors.expense.withOpacity(0.4) : AppColors.border),
+          border: Border.all(color: over ? AppColors.expense.withValues(alpha: 0.4) : AppColors.border),
         ),
         child: Column(children: [
           Row(children: [
@@ -48,7 +48,7 @@ class BudgetBar extends StatelessWidget {
             builder: (_, v, __) => ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
-                value: v, backgroundColor: AppColors.bg700,
+                value: v, backgroundColor: AppColors.cream300,
                 valueColor: AlwaysStoppedAnimation(color), minHeight: 7,
               ),
             ),

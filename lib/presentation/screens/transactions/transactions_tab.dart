@@ -12,6 +12,7 @@ import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_event.dart';
 import '../../blocs/transaction/transaction_state.dart';
 import 'package:finmann/shared/widgets/amount_badge.dart';
+import 'package:finmann/shared/widgets/fm_skeleton.dart';
 import 'add_transaction_sheet.dart';
 
 class TransactionsTab extends StatefulWidget {
@@ -44,12 +45,18 @@ class _TransactionsTabState extends State<TransactionsTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bg900,
+      backgroundColor: AppColors.cream100,
       body: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, state) {
           if (state is TransactionLoading) {
-            return const Center(
-                child: CircularProgressIndicator(color: AppColors.primary));
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              itemCount: 5,
+              itemBuilder: (_, i) => const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: FmSkeleton(width: double.infinity, height: 72),
+              ),
+            );
           }
 
           if (state is TransactionLoaded) {
@@ -71,7 +78,7 @@ class _TransactionsTabState extends State<TransactionsTab> {
                 SliverAppBar(
                   pinned: true,
                   expandedHeight: 196,
-                  backgroundColor: AppColors.bg900,
+                  backgroundColor: AppColors.cream100,
                   elevation: 0,
                   flexibleSpace: FlexibleSpaceBar(
                     collapseMode: CollapseMode.pin,
@@ -115,11 +122,11 @@ class _TransactionsTabState extends State<TransactionsTab> {
                                     ),
                                     child: const Row(children: [
                                       Icon(Icons.add_rounded,
-                                          color: AppColors.bg900, size: 16),
+                                          color: AppColors.cream100, size: 16),
                                       SizedBox(width: 5),
                                       Text('Add',
                                           style: TextStyle(
-                                              color: AppColors.bg900,
+                                              color: AppColors.cream100,
                                               fontWeight: FontWeight.w700,
                                               fontSize: 13)),
                                     ]),
@@ -156,7 +163,7 @@ class _TransactionsTabState extends State<TransactionsTab> {
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(48),
                     child: Container(
-                      color: AppColors.bg900,
+                      color: AppColors.cream100,
                       padding: const EdgeInsets.fromLTRB(16, 4, 16, 10),
                       child: Row(children: [
                         _FilterChip(
@@ -237,15 +244,15 @@ class _SummaryCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
+          color: color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: color.withOpacity(0.2)),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
         child: Row(children: [
           Container(
             padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
+              color: color.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: color, size: 14),
@@ -300,7 +307,7 @@ class _FilterChip extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: selected ? c.withOpacity(0.12) : AppColors.bg800,
+          color: selected ? c.withValues(alpha: 0.12) : AppColors.cream200,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: selected ? c : AppColors.border),
         ),
@@ -399,7 +406,7 @@ class _TxRow extends StatelessWidget {
       direction: DismissDirection.endToStart,
       background: Container(
         decoration: BoxDecoration(
-          color: AppColors.expense.withOpacity(0.12),
+          color: AppColors.expense.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.centerRight,
@@ -439,7 +446,7 @@ class _TxRow extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: AppColors.bg700,
+                color: AppColors.cream300,
                 borderRadius: BorderRadius.circular(13),
               ),
               child: Center(
@@ -491,7 +498,7 @@ class _EmptyState extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: AppColors.bg800,
+            color: AppColors.cream200,
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.border),
           ),

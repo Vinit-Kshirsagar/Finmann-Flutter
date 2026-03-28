@@ -91,7 +91,7 @@ class _LoginBodyState extends State<_LoginBody> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(Icons.account_balance_wallet_rounded,
-                        color: AppColors.bg900, size: 28),
+                        color: AppColors.cream100, size: 28),
                   ).animate().scale(duration: 400.ms, curve: Curves.elasticOut),
                   const SizedBox(height: 32),
                   Text('Welcome back',

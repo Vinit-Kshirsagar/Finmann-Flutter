@@ -80,7 +80,7 @@ class _RingPainter extends CustomPainter {
 
     // Track
     canvas.drawCircle(Offset(cx, cy), radius, Paint()
-      ..color = color.withOpacity(0.12)
+      ..color = color.withValues(alpha: 0.12)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeW);
 
