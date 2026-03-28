@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/di/service_locator.dart';
 import '../../../core/theme/app_theme.dart';
@@ -8,7 +9,7 @@ import '../../../core/utils/currency_formatter.dart';
 import '../../../core/utils/date_formatter.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../../data/models/user_model.dart';
-import '../../../data/repositories/budget_repository.dart';
+import '../../../data/repositories/i_budget_repository.dart';
 import '../../../data/models/budget_model.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
@@ -17,7 +18,6 @@ import '../../blocs/transaction/transaction_state.dart';
 import '../../widgets/charts/velocity_card.dart';
 import '../../widgets/charts/budget_bar.dart';
 import '../../widgets/common/amount_badge.dart';
-import '../../widgets/common/gradient_text.dart';
 import '../transactions/add_transaction_sheet.dart';
 import '../transactions/nlp_input_sheet.dart';
 
@@ -31,7 +31,7 @@ class DashboardTab extends StatefulWidget {
 
 class _DashboardTabState extends State<DashboardTab> {
   List<BudgetModel> _budgets = [];
-  final _budgetRepo = sl<BudgetRepository>();
+  final _budgetRepo = sl<IBudgetRepository>();
 
   @override
   void initState() { super.initState(); _loadBudgets(); }
@@ -149,7 +149,7 @@ class _DashboardTabState extends State<DashboardTab> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.bg800,
+      backgroundColor: AppColors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
       builder: (_) => _BudgetManagerSheet(
@@ -176,15 +176,14 @@ class _SliverAppBar extends StatelessWidget {
         Container(
           width: 34, height: 34,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(colors: [AppColors.g1, AppColors.g2]),
+            color: AppColors.primary,
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Icon(Icons.account_balance_wallet_rounded, color: AppColors.bg900, size: 17),
+          child: const Icon(Icons.account_balance_wallet_rounded, color: Colors.white, size: 17),
         ),
         const SizedBox(width: 10),
-        GradientText('FinMann',
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-          gradient: const LinearGradient(colors: [AppColors.g1, AppColors.g2])),
+        const Text('FinMann',
+          style: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.w800)),
       ]),
       actions: [
         PopupMenuButton(
@@ -231,10 +230,7 @@ class _BalanceHero extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF0D2016), Color(0xFF0F2A1A), Color(0xFF0A1E14)],
-          begin: Alignment.topLeft, end: Alignment.bottomRight,
-        ),
+        color: AppColors.primaryDark,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.primary.withOpacity(0.2)),
         boxShadow: [
@@ -244,38 +240,40 @@ class _BalanceHero extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           Text('Good ${_greeting()}, $userName 👋',
-            style: const TextStyle(color: AppColors.textSecondary, fontSize: 13, fontWeight: FontWeight.w500)),
+            style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w500)),
           const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
+              color: Colors.white.withOpacity(0.15),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.primary.withOpacity(0.25)),
             ),
             child: Text(DateFormatter.formatMonth(DateTime.now()),
-              style: const TextStyle(color: AppColors.primary, fontSize: 11, fontWeight: FontWeight.w600)),
+              style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
           ),
         ]),
         const SizedBox(height: 12),
-        const Text('Total Balance', style: TextStyle(color: AppColors.textMuted, fontSize: 12)),
+        const Text('Total Balance', style: TextStyle(color: Colors.white60, fontSize: 12)),
         const SizedBox(height: 6),
         TweenAnimationBuilder<double>(
           tween: Tween(begin: 0, end: balance),
           duration: const Duration(milliseconds: 900),
           curve: Curves.easeOutCubic,
-          builder: (_, v, __) => GradientText(
+          builder: (_, v, __) => Text(
             CurrencyFormatter.format(v),
-            style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w800, letterSpacing: -1),
-            gradient: const LinearGradient(colors: [AppColors.g1, AppColors.g2]),
+            style: GoogleFonts.dmSerifDisplay(
+              color: Colors.white,
+              fontSize: 38,
+              letterSpacing: 0,
+            ),
           ),
         ),
         const SizedBox(height: 20),
-        const Divider(color: Color(0xFF1A3322), height: 1),
+        const Divider(color: Colors.white24, height: 1),
         const SizedBox(height: 16),
         Row(children: [
           Expanded(child: _MiniStat(label: 'Income', amount: income, isIncome: true)),
-          Container(width: 1, height: 32, color: AppColors.border),
+          Container(width: 1, height: 32, color: Colors.white24),
           Expanded(child: _MiniStat(label: 'Expense', amount: expense, isIncome: false)),
         ]),
       ]),
@@ -298,24 +296,23 @@ class _MiniStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isIncome ? AppColors.income : AppColors.expense;
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
         width: 28, height: 28,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
+          color: Colors.white.withOpacity(0.15),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Icon(
           isIncome ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
-          color: color, size: 14,
+          color: Colors.white, size: 14,
         ),
       ),
       const SizedBox(width: 10),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(label, style: const TextStyle(color: AppColors.textMuted, fontSize: 11)),
+        Text(label, style: const TextStyle(color: Colors.white70, fontSize: 11)),
         Text(CurrencyFormatter.formatCompact(amount),
-          style: TextStyle(color: color, fontWeight: FontWeight.w700, fontSize: 14)),
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 14)),
       ]),
     ]);
   }
@@ -394,9 +391,18 @@ class _TxTile extends StatelessWidget {
   final TransactionModel tx;
   const _TxTile({required this.tx});
 
+  Color _getCategoryColor(String category) {
+    if (category == 'Food & Dining') return AppColors.expense;
+    if (category == 'Transport') return AppColors.info;
+    if (category == 'Shopping') return AppColors.warning;
+    if (category == 'Entertainment') return AppColors.accent;
+    return AppColors.primaryLight;
+  }
+
   @override
   Widget build(BuildContext context) {
     final emoji = AppConstants.categoryIcons[tx.category] ?? '💸';
+    final dotColor = _getCategoryColor(tx.category);
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -408,7 +414,7 @@ class _TxTile extends StatelessWidget {
       child: Row(children: [
         Container(
           width: 42, height: 42,
-          decoration: BoxDecoration(color: AppColors.bg700, borderRadius: BorderRadius.circular(12)),
+          decoration: BoxDecoration(color: dotColor.withOpacity(0.15), shape: BoxShape.circle),
           child: Center(child: Text(emoji, style: const TextStyle(fontSize: 19))),
         ),
         const SizedBox(width: 12),
@@ -505,7 +511,7 @@ class _BudgetManagerSheet extends StatefulWidget {
   final String userId;
   final List<BudgetModel> budgets;
   final List<TransactionModel> monthTxns;
-  final BudgetRepository repo;
+  final IBudgetRepository repo;
   final VoidCallback onSaved;
 
   const _BudgetManagerSheet({

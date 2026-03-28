@@ -2,55 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
-  static const bg900 = Color(0xFF060B08);
-  static const bg800 = Color(0xFF0A1210);
-  static const bg700 = Color(0xFF0F1A13);
-  static const bg600 = Color(0xFF141F18);
-  static const surface = Color(0xFF172219);
-  static const surfaceElevated = Color(0xFF1D2C20);
-  static const surfaceHover = Color(0xFF223227);
-  static const border = Color(0xFF1E3324);
-  static const borderBright = Color(0xFF2A4A32);
+  static const bg900 = Color(0xFFF7F5F0); // Warm cream organic bg
+  static const bg800 = Color(0xFFEBE8E0); 
+  static const bg700 = Color(0xFFE0DCD1); 
+  static const bg600 = Color(0xFFD6D1C4); 
 
-  static const primary = Color(0xFF00E676);
-  static const primaryLight = Color(0xFF69F0AE);
-  static const primaryDark = Color(0xFF00B35A);
-  static const accent = Color(0xFF1DE9B6);
-  static const accentDim = Color(0xFF00BFA5);
+  static const surface = Color(0xFFFFFFFF); // White card
+  static const surfaceElevated = Color(0xFFFAFAFA); 
+  static const surfaceHover = Color(0xFFF5F5F5); 
+  static const border = Color(0xFFEBE8E0); 
+  static const borderBright = Color(0xFFE0DCD1);
 
-  static const expense = Color(0xFFFF4C6A);
-  static const expenseDim = Color(0xFFBF3650);
-  static const expenseSurface = Color(0xFF1F1118);
-  static const income = Color(0xFF00E676);
-  static const incomeSurface = Color(0xFF0D1F14);
-  static const warning = Color(0xFFFFB300);
-  static const warningSurface = Color(0xFF1F1A0D);
-  static const info = Color(0xFF40C4FF);
+  static const primary = Color(0xFF2D6A4F); // Forest green
+  static const primaryLight = Color(0xFF40916C);
+  static const primaryDark = Color(0xFF1B4332);
+  static const accent = Color(0xFF52B788);
+  static const accentDim = Color(0xFF74C69D);
 
-  static const textPrimary = Color(0xFFECF5EE);
-  static const textSecondary = Color(0xFF7DBF8A);
-  static const textMuted = Color(0xFF3E6B49);
-  static const textDisabled = Color(0xFF243B2A);
+  static const expense = Color(0xFFE07A5F); // Organic red
+  static const expenseDim = Color(0xFFE59882);
+  static const expenseSurface = Color(0xFFFDF2EF);
+  
+  static const income = Color(0xFF2D6A4F); // Forest green
+  static const incomeSurface = Color(0xFFE9F0EC);
+  
+  static const warning = Color(0xFFF4A261);
+  static const warningSurface = Color(0xFFFDF5ED);
+  
+  static const info = Color(0xFF2A9D8F);
+
+  static const textPrimary = Color(0xFF1A1C1A); // Almost black
+  static const textSecondary = Color(0xFF4A5568); // Muted dark
+  static const textMuted = Color(0xFF868E96); 
+  static const textDisabled = Color(0xFFADB5BD);
 
   // gradient stops
-  static const g1 = Color(0xFF00E676);
-  static const g2 = Color(0xFF1DE9B6);
-  static const g3 = Color(0xFF00B0FF);
+  static const g1 = Color(0xFF2D6A4F);
+  static const g2 = Color(0xFF40916C);
+  static const g3 = Color(0xFF52B788);
 }
 
 class AppTheme {
-  static ThemeData get dark {
+  static ThemeData get theme {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.bg900,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: const ColorScheme.light(
         primary: AppColors.primary,
         secondary: AppColors.accent,
         surface: AppColors.surface,
         error: AppColors.expense,
-        onPrimary: AppColors.bg900,
-        onSecondary: AppColors.bg900,
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
         onSurface: AppColors.textPrimary,
       ),
       textTheme: GoogleFonts.dmSansTextTheme().copyWith(
@@ -91,7 +95,7 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.bg700,
+        fillColor: AppColors.surface,
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -115,7 +119,7 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.bg900,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           textStyle: GoogleFonts.spaceGrotesk(
@@ -126,7 +130,7 @@ class AppTheme {
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.primaryLight,
+          foregroundColor: AppColors.primary,
           textStyle: GoogleFonts.spaceGrotesk(fontSize: 14, fontWeight: FontWeight.w600),
         ),
       ),
@@ -142,7 +146,7 @@ class AppTheme {
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.bg800,
+        backgroundColor: AppColors.surface,
         selectedItemColor: AppColors.primary,
         unselectedItemColor: AppColors.textMuted,
         elevation: 0,

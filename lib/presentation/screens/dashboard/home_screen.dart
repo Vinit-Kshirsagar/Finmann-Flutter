@@ -6,6 +6,12 @@ import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_event.dart';
+import '../../blocs/analytics/analytics_bloc.dart';
+import '../../blocs/analytics/analytics_event.dart';
+import '../../blocs/budget/budget_bloc.dart';
+import '../../blocs/budget/budget_event.dart';
+import '../../blocs/goal/goal_bloc.dart';
+import '../../blocs/goal/goal_event.dart';
 import '../../widgets/nav/animated_bottom_nav.dart';
 import '../auth/login_screen.dart';
 import 'dashboard_tab.dart';
@@ -31,6 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
         BlocProvider(create: (_) => sl<AuthBloc>()),
         BlocProvider(create: (_) => sl<TransactionBloc>()
           ..add(LoadTransactions(widget.user.id))),
+        BlocProvider(create: (_) => sl<AnalyticsBloc>()
+          ..add(LoadAnalytics(widget.user.id))),
+        BlocProvider(create: (_) => sl<GoalBloc>()
+          ..add(LoadGoals(widget.user.id))),
+        BlocProvider(create: (_) {
+          final now = DateTime.now();
+          return sl<BudgetBloc>()..add(LoadBudgets(widget.user.id, now.year, now.month));
+        }),
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {

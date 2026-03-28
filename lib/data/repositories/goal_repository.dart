@@ -1,10 +1,12 @@
 import 'package:uuid/uuid.dart';
 import '../datasources/local_database.dart';
 import '../models/goal_model.dart';
+import 'i_goal_repository.dart';
 
-class GoalRepository {
+class GoalRepository implements IGoalRepository {
   final _uuid = const Uuid();
 
+  @override
   Future<List<GoalModel>> getAll(String userId) async {
     final db = await LocalDatabase.database;
     final rows = await db.query('goals', where: 'user_id = ?', whereArgs: [userId],
@@ -12,6 +14,7 @@ class GoalRepository {
     return rows.map(GoalModel.fromMap).toList();
   }
 
+  @override
   Future<GoalModel> create({
     required String userId, required String name, required String emoji,
     required double targetAmount, DateTime? deadline,
@@ -26,6 +29,7 @@ class GoalRepository {
     return goal;
   }
 
+  @override
   Future<void> addSavings(String goalId, double amount) async {
     final db = await LocalDatabase.database;
     await db.rawUpdate(
@@ -33,6 +37,7 @@ class GoalRepository {
       [amount, goalId]);
   }
 
+  @override
   Future<void> delete(String id) async {
     final db = await LocalDatabase.database;
     await db.delete('goals', where: 'id = ?', whereArgs: [id]);
