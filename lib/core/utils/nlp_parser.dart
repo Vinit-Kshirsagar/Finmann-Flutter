@@ -1,4 +1,4 @@
-import '../constants/app_constants.dart';
+
 import '../../data/models/transaction_model.dart';
 
 class NlpResult {

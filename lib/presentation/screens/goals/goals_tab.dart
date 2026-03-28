@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../core/di/service_locator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/models/goal_model.dart';
 import '../../../data/models/user_model.dart';
-import '../../../data/repositories/i_goal_repository.dart';
+import '../../blocs/goal/goal_bloc.dart';
+import '../../blocs/goal/goal_event.dart';
+import '../../blocs/goal/goal_state.dart';
 import '../../widgets/charts/goal_ring.dart';
-import '../../widgets/common/fm_button.dart';
-import '../../widgets/common/fm_text_field.dart';
+import 'package:finmann/shared/widgets/fm_button.dart';
+import 'package:finmann/shared/widgets/fm_text_field.dart';
+import 'package:finmann/shared/widgets/fm_skeleton.dart';
 
 class GoalsTab extends StatefulWidget {
   final UserModel user;
@@ -20,17 +23,10 @@ class GoalsTab extends StatefulWidget {
 }
 
 class _GoalsTabState extends State<GoalsTab> {
-  final _repo = sl<IGoalRepository>();
-  List<GoalModel> _goals = [];
-  bool _loading = true;
-
   @override
-  void initState() { super.initState(); _load(); }
-
-  Future<void> _load() async {
-    setState(() => _loading = true);
-    _goals = await _repo.getAll(widget.user.id);
-    setState(() => _loading = false);
+  void initState() {
+    super.initState();
+    // Goals are loaded by HomeScreen via BlocProvider
   }
 
   @override
@@ -45,31 +41,46 @@ class _GoalsTabState extends State<GoalsTab> {
           ),
         ],
       ),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
-          : _goals.isEmpty
-              ? _EmptyGoals(onAdd: () => _showAddGoal(context))
-              : RefreshIndicator(
-                  onRefresh: _load,
-                  color: AppColors.primary,
-                  child: ListView(
-                    padding: const EdgeInsets.all(16),
-                    children: [
-                      ..._goals.asMap().entries.map((e) =>
-                        _GoalCard(goal: e.value,
-                          onAddSavings: () => _showAddSavings(context, e.value),
-                          onDelete: () async {
-                            await _repo.delete(e.value.id);
-                            _load();
-                          },
-                        ).animate()
-                          .fadeIn(delay: Duration(milliseconds: e.key * 80))
-                          .slideY(begin: 0.06),
-                      ),
-                      const SizedBox(height: 80),
-                    ],
+      body: BlocBuilder<GoalBloc, GoalState>(
+        builder: (context, state) {
+          if (state is GoalLoading) {
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: 3,
+              itemBuilder: (_, i) => const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: FmSkeleton(width: double.infinity, height: 120),
+              ),
+            );
+          } else if (state is GoalLoaded) {
+            if (state.goals.isEmpty) {
+              return _EmptyGoals(onAdd: () => _showAddGoal(context));
+            }
+            return RefreshIndicator(
+              onRefresh: () async => context.read<GoalBloc>().add(LoadGoals(widget.user.id)),
+              color: AppColors.primary,
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  ...state.goals.asMap().entries.map((e) =>
+                    _GoalCard(
+                      goal: e.value,
+                      onAddSavings: () => _showAddSavings(context, e.value),
+                      onDelete: () => context.read<GoalBloc>().add(DeleteGoal(e.value.id, widget.user.id)),
+                    ).animate()
+                      .fadeIn(delay: Duration(milliseconds: e.key * 80))
+                      .slideY(begin: 0.06),
                   ),
-                ),
+                  const SizedBox(height: 80),
+                ],
+              ),
+            );
+          } else if (state is GoalError) {
+            return Center(child: Text('Error: ${state.message}', style: const TextStyle(color: AppColors.expense)));
+          }
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 
@@ -81,7 +92,7 @@ class _GoalsTabState extends State<GoalsTab> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.bg800,
+      backgroundColor: AppColors.cream200,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
       builder: (_) => StatefulBuilder(builder: (ctx, setSt) {
@@ -107,7 +118,7 @@ class _GoalsTabState extends State<GoalsTab> {
                     margin: const EdgeInsets.only(right: 8),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: emoji == e ? AppColors.primary.withOpacity(0.15) : AppColors.bg700,
+                      color: emoji == e ? AppColors.primary.withValues(alpha: 0.15) : AppColors.cream300,
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: emoji == e ? AppColors.primary : AppColors.border),
                     ),
@@ -131,13 +142,13 @@ class _GoalsTabState extends State<GoalsTab> {
                 label: 'Create Goal', icon: Icons.flag_rounded,
                 onPressed: () async {
                   if (nameCtrl.text.isEmpty || amtCtrl.text.isEmpty) return;
-                  await _repo.create(
-                    userId: widget.user.id, name: nameCtrl.text.trim(),
+                  context.read<GoalBloc>().add(AddGoal(
+                    userId: widget.user.id,
+                    name: nameCtrl.text.trim(),
                     emoji: emoji,
                     targetAmount: double.tryParse(amtCtrl.text) ?? 0,
-                  );
-                  Navigator.pop(ctx);
-                  _load();
+                  ));
+                  if (ctx.mounted) Navigator.pop(ctx);
                 },
               ),
             ],
@@ -152,7 +163,7 @@ class _GoalsTabState extends State<GoalsTab> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.bg800,
+      backgroundColor: AppColors.cream200,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
       builder: (_) => Padding(
@@ -180,9 +191,12 @@ class _GoalsTabState extends State<GoalsTab> {
             onPressed: () async {
               final amt = double.tryParse(amtCtrl.text);
               if (amt == null || amt <= 0) return;
-              await _repo.addSavings(goal.id, amt);
-              Navigator.pop(context);
-              _load();
+              context.read<GoalBloc>().add(AddGoalSavings(
+                userId: widget.user.id,
+                goalId: goal.id,
+                amount: amt,
+              ));
+              if (context.mounted) Navigator.pop(context);
             },
           ),
         ]),
@@ -210,7 +224,7 @@ class _GoalCard extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: goal.isCompleted ? AppColors.accent.withOpacity(0.4) : AppColors.border),
+          color: goal.isCompleted ? AppColors.accent.withValues(alpha: 0.4) : AppColors.border),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [

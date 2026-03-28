@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../../core/constants/app_constants.dart';
 import '../../../core/di/service_locator.dart';
 import '../../../core/theme/app_theme.dart';
@@ -17,7 +17,7 @@ import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_state.dart';
 import '../../widgets/charts/velocity_card.dart';
 import '../../widgets/charts/budget_bar.dart';
-import '../../widgets/common/amount_badge.dart';
+import 'package:finmann/shared/widgets/amount_badge.dart';
 import '../transactions/add_transaction_sheet.dart';
 import '../transactions/nlp_input_sheet.dart';
 
@@ -171,13 +171,13 @@ class _SliverAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       floating: true,
-      backgroundColor: AppColors.bg900,
+      backgroundColor: AppColors.cream100,
       title: Row(children: [
         Container(
           width: 34, height: 34,
           decoration: BoxDecoration(
             color: AppColors.primary,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           child: const Icon(Icons.account_balance_wallet_rounded, color: Colors.white, size: 17),
         ),
@@ -231,11 +231,8 @@ class _BalanceHero extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.primaryDark,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-        boxShadow: [
-          BoxShadow(color: AppColors.primary.withOpacity(0.06), blurRadius: 30, spreadRadius: 0),
-        ],
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
@@ -245,8 +242,8 @@ class _BalanceHero extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(20),
+              color: Colors.white.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
             child: Text(DateFormatter.formatMonth(DateTime.now()),
               style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
@@ -261,10 +258,9 @@ class _BalanceHero extends StatelessWidget {
           curve: Curves.easeOutCubic,
           builder: (_, v, __) => Text(
             CurrencyFormatter.format(v),
-            style: GoogleFonts.dmSerifDisplay(
+            style: AppTypography.hero.copyWith(
               color: Colors.white,
               fontSize: 38,
-              letterSpacing: 0,
             ),
           ),
         ),
@@ -300,8 +296,8 @@ class _MiniStat extends StatelessWidget {
       Container(
         width: 28, height: 28,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(8),
+          color: Colors.white.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(AppRadius.sm),
         ),
         child: Icon(
           isIncome ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
@@ -356,9 +352,9 @@ class _QBtn extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.25)),
+          color: color.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: color.withValues(alpha: 0.25)),
         ),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Icon(icon, color: color, size: 18),
@@ -408,13 +404,13 @@ class _TxTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: AppColors.border),
       ),
       child: Row(children: [
         Container(
           width: 42, height: 42,
-          decoration: BoxDecoration(color: dotColor.withOpacity(0.15), shape: BoxShape.circle),
+          decoration: BoxDecoration(color: dotColor.withValues(alpha: 0.15), shape: BoxShape.circle),
           child: Center(child: Text(emoji, style: const TextStyle(fontSize: 19))),
         ),
         const SizedBox(width: 12),
@@ -448,9 +444,9 @@ class _SetBudgetCta extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.primary.withOpacity(0.06),
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.primary.withOpacity(0.2), style: BorderStyle.solid),
+          color: AppColors.primary.withValues(alpha: 0.06),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          border: Border.all(color: AppColors.primary.withValues(alpha: 0.2), style: BorderStyle.solid),
         ),
         child: Row(children: [
           const Icon(Icons.account_balance_wallet_outlined, color: AppColors.primary, size: 22),
@@ -498,9 +494,9 @@ class _Fab extends StatelessWidget {
     return FloatingActionButton(
       onPressed: () => showAddTransactionSheet(context, userId: userId),
       backgroundColor: AppColors.primary,
-      foregroundColor: AppColors.bg900,
+      foregroundColor: AppColors.cream100,
       elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: const Icon(Icons.add_rounded, size: 26),
     );
   }
@@ -584,7 +580,7 @@ class _BudgetManagerSheetState extends State<_BudgetManagerSheet> {
                       hintText: '₹ limit',
                       hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 12),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                      filled: true, fillColor: AppColors.bg700,
+                      filled: true, fillColor: AppColors.cream300,
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10),
                         borderSide: const BorderSide(color: AppColors.border)),
                       enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10),

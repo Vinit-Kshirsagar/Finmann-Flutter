@@ -6,8 +6,8 @@ import '../../../core/di/service_locator.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
-import '../../widgets/common/fm_button.dart';
-import '../../widgets/common/fm_text_field.dart';
+import 'package:finmann/shared/widgets/fm_button.dart';
+import 'package:finmann/shared/widgets/fm_text_field.dart';
 import '../dashboard/home_screen.dart';
 import '../../../core/utils/app_router.dart';
 import 'register_screen.dart';
@@ -91,7 +91,7 @@ class _LoginBodyState extends State<_LoginBody> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Icon(Icons.account_balance_wallet_rounded,
-                        color: AppColors.bg900, size: 28),
+                        color: AppColors.cream100, size: 28),
                   ).animate().scale(duration: 400.ms, curve: Curves.elasticOut),
                   const SizedBox(height: 32),
                   Text('Welcome back',

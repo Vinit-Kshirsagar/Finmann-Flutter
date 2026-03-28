@@ -16,7 +16,7 @@ class FmCard extends StatefulWidget {
     this.onTap,
     this.borderColor,
     this.backgroundColor,
-    this.radius = 20,
+    this.radius = AppRadius.lg,
   });
 
   @override

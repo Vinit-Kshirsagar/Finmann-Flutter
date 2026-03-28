@@ -1,7 +1,7 @@
 //lib\presentation\screens\transactions\add_transaction_sheet.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../core/constants/app_constants.dart';
@@ -9,15 +9,15 @@ import '../../../core/theme/app_theme.dart';
 import '../../../data/models/transaction_model.dart';
 import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_event.dart';
-import '../../widgets/common/fm_button.dart';
-import '../../widgets/common/fm_text_field.dart';
+import 'package:finmann/shared/widgets/fm_button.dart';
+import 'package:finmann/shared/widgets/fm_text_field.dart';
 
 void showAddTransactionSheet(BuildContext context,
     {required String userId, TransactionModel? existing}) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: AppColors.bg800,
+    backgroundColor: AppColors.cream200,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -122,7 +122,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
         data: Theme.of(context).copyWith(
           colorScheme: const ColorScheme.dark(
             primary: AppColors.primary,
-            onPrimary: AppColors.bg900,
+            onPrimary: AppColors.cream100,
             surface: AppColors.surface,
           ),
         ),
@@ -171,7 +171,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
             // Type toggle
             Container(
               decoration: BoxDecoration(
-                color: AppColors.bg700,
+                color: AppColors.cream300,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -220,13 +220,13 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
             const SizedBox(height: 16),
             // Category
             DropdownButtonFormField<String>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               hint: const Text('Select Category'),
               dropdownColor: AppColors.surfaceElevated,
               style: const TextStyle(color: AppColors.textPrimary),
               decoration: InputDecoration(
                 filled: true,
-                fillColor: AppColors.bg700,
+                fillColor: AppColors.cream300,
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 border: OutlineInputBorder(
@@ -310,9 +310,9 @@ class _TypeTab extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? color.withOpacity(0.15) : Colors.transparent,
+            color: isSelected ? color.withValues(alpha: 0.15) : Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            border: isSelected ? Border.all(color: color.withOpacity(0.4)) : null,
+            border: isSelected ? Border.all(color: color.withValues(alpha: 0.4)) : null,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
