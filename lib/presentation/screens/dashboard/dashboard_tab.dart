@@ -17,7 +17,7 @@ import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_state.dart';
 import '../../widgets/charts/velocity_card.dart';
 import '../../widgets/charts/budget_bar.dart';
-import '../../widgets/common/amount_badge.dart';
+import 'package:finmann/shared/widgets/amount_badge.dart';
 import '../transactions/add_transaction_sheet.dart';
 import '../transactions/nlp_input_sheet.dart';
 

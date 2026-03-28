@@ -8,8 +8,8 @@ import '../../../data/models/goal_model.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/i_goal_repository.dart';
 import '../../widgets/charts/goal_ring.dart';
-import '../../widgets/common/fm_button.dart';
-import '../../widgets/common/fm_text_field.dart';
+import 'package:finmann/shared/widgets/fm_button.dart';
+import 'package:finmann/shared/widgets/fm_text_field.dart';
 
 class GoalsTab extends StatefulWidget {
   final UserModel user;

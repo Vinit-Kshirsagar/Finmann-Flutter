@@ -39,7 +39,7 @@ class FmButton extends StatelessWidget {
           side: BorderSide(color: bg),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
         ),
       );
     }
@@ -47,21 +47,25 @@ class FmButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
-        style: ElevatedButton.styleFrom(backgroundColor: bg),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: bg,
+          foregroundColor: AppColors.surface,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+        ),
         child: isLoading
             ? const SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.bg900,
+                  color: AppColors.surface,
                 ),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (icon != null) ...[
-                    Icon(icon, size: 18, color: AppColors.bg900),
+                    Icon(icon, size: 18, color: AppColors.surface),
                     const SizedBox(width: 8),
                   ],
                   Text(label),

@@ -10,7 +10,7 @@ import '../../../data/models/transaction_model.dart';
 import '../../../data/models/user_model.dart';
 import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_state.dart';
-import '../../widgets/common/fm_card.dart';
+import 'package:finmann/shared/widgets/fm_card.dart';
 
 // Softer, more harmonious palette — avoids harsh reds/yellows clashing
 const _kPieColors = [

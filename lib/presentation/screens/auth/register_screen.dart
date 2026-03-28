@@ -6,8 +6,8 @@ import '../../../core/di/service_locator.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
-import '../../widgets/common/fm_button.dart';
-import '../../widgets/common/fm_text_field.dart';
+import 'package:finmann/shared/widgets/fm_button.dart';
+import 'package:finmann/shared/widgets/fm_text_field.dart';
 import '../dashboard/home_screen.dart';
 import '../../../core/utils/app_router.dart';
 

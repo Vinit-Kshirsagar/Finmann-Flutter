@@ -11,7 +11,7 @@ import '../../../data/models/user_model.dart';
 import '../../blocs/transaction/transaction_bloc.dart';
 import '../../blocs/transaction/transaction_event.dart';
 import '../../blocs/transaction/transaction_state.dart';
-import '../../widgets/common/amount_badge.dart';
+import 'package:finmann/shared/widgets/amount_badge.dart';
 import 'add_transaction_sheet.dart';
 
 class TransactionsTab extends StatefulWidget {
