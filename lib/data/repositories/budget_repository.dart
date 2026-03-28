@@ -1,10 +1,12 @@
 import 'package:uuid/uuid.dart';
 import '../datasources/local_database.dart';
 import '../models/budget_model.dart';
+import 'i_budget_repository.dart';
 
-class BudgetRepository {
+class BudgetRepository implements IBudgetRepository {
   final _uuid = const Uuid();
 
+  @override
   Future<List<BudgetModel>> getForMonth(String userId, int year, int month) async {
     final db = await LocalDatabase.database;
     final rows = await db.query('budgets',
@@ -12,6 +14,7 @@ class BudgetRepository {
     return rows.map(BudgetModel.fromMap).toList();
   }
 
+  @override
   Future<BudgetModel> upsert({
     required String userId, required String category,
     required double limitAmount, required int month, required int year,
@@ -35,6 +38,7 @@ class BudgetRepository {
     return budget;
   }
 
+  @override
   Future<void> delete(String id) async {
     final db = await LocalDatabase.database;
     await db.delete('budgets', where: 'id = ?', whereArgs: [id]);

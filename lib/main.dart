@@ -7,10 +7,9 @@ import 'presentation/screens/auth/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Force dark status bar icons on transparent bar
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
   ));
 
   SystemChrome.setPreferredOrientations([
@@ -30,7 +29,7 @@ class FinMannApp extends StatelessWidget {
     return MaterialApp(
       title: 'FinMann',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.dark,
+      theme: AppTheme.theme,
       home: const LoginScreen(),
     );
   }

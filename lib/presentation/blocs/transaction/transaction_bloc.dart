@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../data/repositories/transaction_repository.dart';
+import '../../../data/repositories/i_transaction_repository.dart';
 import 'transaction_event.dart';
 import 'transaction_state.dart';
 
 class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
-  final TransactionRepository _repo;
+  final ITransactionRepository _repo;
 
   TransactionBloc(this._repo) : super(TransactionInitial()) {
     on<LoadTransactions>(_onLoad);

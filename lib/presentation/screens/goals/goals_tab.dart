@@ -6,7 +6,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/currency_formatter.dart';
 import '../../../data/models/goal_model.dart';
 import '../../../data/models/user_model.dart';
-import '../../../data/repositories/goal_repository.dart';
+import '../../../data/repositories/i_goal_repository.dart';
 import '../../widgets/charts/goal_ring.dart';
 import '../../widgets/common/fm_button.dart';
 import '../../widgets/common/fm_text_field.dart';
@@ -20,7 +20,7 @@ class GoalsTab extends StatefulWidget {
 }
 
 class _GoalsTabState extends State<GoalsTab> {
-  final _repo = sl<GoalRepository>();
+  final _repo = sl<IGoalRepository>();
   List<GoalModel> _goals = [];
   bool _loading = true;
 

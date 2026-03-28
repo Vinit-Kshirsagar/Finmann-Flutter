@@ -1,21 +1,26 @@
 import 'package:uuid/uuid.dart';
 import '../datasources/local_database.dart';
 import '../models/transaction_model.dart';
+import 'i_transaction_repository.dart';
 
-class TransactionRepository {
+class TransactionRepository implements ITransactionRepository {
   final _uuid = const Uuid();
 
-  Future<List<TransactionModel>> getAll(String userId) async {
+  @override
+  Future<List<TransactionModel>> getAll(String userId, {int? limit, int? offset}) async {
     final db = await LocalDatabase.database;
     final rows = await db.query(
       'transactions',
       where: 'user_id = ?',
       whereArgs: [userId],
       orderBy: 'date DESC',
+      limit: limit,
+      offset: offset,
     );
     return rows.map(TransactionModel.fromMap).toList();
   }
 
+  @override
   Future<List<TransactionModel>> getByMonth(
       String userId, int year, int month) async {
     final db = await LocalDatabase.database;
@@ -30,6 +35,7 @@ class TransactionRepository {
     return rows.map(TransactionModel.fromMap).toList();
   }
 
+  @override
   Future<TransactionModel> add({
     required String userId,
     required TransactionType type,
@@ -53,6 +59,7 @@ class TransactionRepository {
     return tx;
   }
 
+  @override
   Future<void> update(TransactionModel tx) async {
     final db = await LocalDatabase.database;
     await db.update(
@@ -63,11 +70,13 @@ class TransactionRepository {
     );
   }
 
+  @override
   Future<void> delete(String id) async {
     final db = await LocalDatabase.database;
     await db.delete('transactions', where: 'id = ?', whereArgs: [id]);
   }
 
+  @override
   Future<Map<String, double>> getCategoryTotals(
       String userId, int year, int month) async {
     final txns = await getByMonth(userId, year, month);
